@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:all_academies/widgets/text.dart';
-import 'package:all_academies/widgets/themes.dart';
-import 'package:all_academies/pages/second-screen.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -71,7 +69,7 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            title: BioticSubtitleText(text: 'Evaluation Result'),
+            title: const BioticSubtitleText(text: 'Evaluation Result'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -81,7 +79,7 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                BioticBoldText(text: 'Expected Response'),
+                const BioticBoldText(text: 'Expected Response'),
                 Text(questionData['sample_answer'])
               ],
             ),
@@ -133,7 +131,7 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
     if (_isLoading) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Question and Answer'),
+          title: const Text('Question and Answer'),
         ),
         body: const Center(
             child: Column(
@@ -201,6 +199,5 @@ class _QuestionAnswerPageState extends State<QuestionAnswerPage> {
       ),
     );
 
-    ;
   }
 }

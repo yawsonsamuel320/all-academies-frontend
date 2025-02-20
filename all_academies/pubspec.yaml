@@ -9,6 +9,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  dio: ^5.8.0
+  flutter_riverpod: ^2.6.1
+  flutter_secure_storage: ^9.2.4
+  horizontal_calendar: ^1.1.2
+  shared_preferences: ^2.5.2
 
 dev_dependencies:
   flutter_test:
@@ -21,6 +26,7 @@ flutter:
 
   assets:
     - assets/documents/college-physics.pdf
+    - assets/images/profile.jpg
 
   fonts:
     - family: Biotic

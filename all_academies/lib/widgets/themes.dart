@@ -7,7 +7,7 @@ final ThemeData lightTheme = ThemeData(
     seedColor: Colors.blue,
     brightness: Brightness.light,
   ),
-  textTheme: TextTheme(
+  textTheme: const TextTheme(
     displayLarge: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.bold,
@@ -36,12 +36,12 @@ final ThemeData darkTheme = ThemeData(
     seedColor: Colors.blue,
     brightness: Brightness.dark,
   ),
-  textTheme: TextTheme(
+  textTheme: const TextTheme(
     displayLarge: TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.bold,
       color:
-          const Color.fromARGB(255, 231, 231, 231), // Text color for dark theme
+          Color.fromARGB(255, 231, 231, 231), // Text color for dark theme
     ),
     titleLarge: TextStyle(
       fontSize: 14,

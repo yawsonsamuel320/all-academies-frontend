@@ -1,37 +1,47 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:all_academies/features/auth/presentation/login_page.dart';
+import 'package:all_academies/features/auth/presentation/signup_page.dart';
 import 'package:all_academies/widgets/text.dart';
-import 'package:all_academies/widgets/themes.dart';
 import 'package:all_academies/pages/question-answer.dart';
+import 'package:all_academies/core/theme.dart';
+import 'package:all_academies/services/auth_storage.dart';
+import 'package:all_academies/core/widgets/bottom_nav_bar.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: AppStarter()));
 }
 
-// Define the theme of the app
-ThemeData themeData = ThemeData(
-  primaryColor:
-      Color.fromARGB(255, 218, 5, 5), // Replace with your red color hex code
-  textButtonTheme: TextButtonThemeData(
-    style: TextButton.styleFrom(
-      foregroundColor: Color.fromARGB(255, 218, 5, 5), // Text color for buttons
-    ),
-  ),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      backgroundColor:
-          Color.fromARGB(255, 218, 5, 5), // Background color for buttons
-    ),
-  ),
-);
+class AppStarter extends StatelessWidget {
+  const AppStarter({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<String?>(
+      future: AuthStorage.getToken(), // Fetch token asynchronously
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const MaterialApp(
+              home: Scaffold(body: Center(child: CircularProgressIndicator())));
+        }
+
+        String initialRoute = (snapshot.data == null || snapshot.data!.isEmpty)
+            ? '/login'
+            : '/home';
+        return MyApp(initialRoute: initialRoute);
+      },
+    );
+  }
+}
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  final String initialRoute;
 
-  String topicSubtitle = "Stability";
-  String topicContent = '''
+  const MyApp({super.key, required this.initialRoute});
+
+  final String topicSubtitle = "Stability";
+  final String topicContent = '''
   It is one thing to have a system in equilibrium; it is quite another for it to be stable. The toy doll perched on the man’s hand in Figure 9.10, for
         example, is not in stable equilibrium. There are three types of equilibrium: stable, unstable, and neutral. Figures throughout this module illustrate
         various examples.
@@ -85,17 +95,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'RCCG Ambassadors App',
+      title: 'All Academies',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 218, 5, 5)),
-        useMaterial3: true,
-      ),
-      home: CourseContentPage(
-        topicSubtitle: topicSubtitle,
-        topicContent: topicContent,
-      ),
+      theme: themeData,
+      initialRoute: initialRoute,
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/login':
+            return MaterialPageRoute(builder: (context) => const LoginPage());
+          case '/signup':
+            return MaterialPageRoute(builder: (context) => const SignupPage());
+          case '/book':
+            final args = settings.arguments as Map<String, String>;
+            return MaterialPageRoute(
+              builder: (context) => CourseContentPage(
+                topicSubtitle: args['topicSubtitle']!,
+                topicContent: args['topicContent']!,
+              ),
+            );
+          case '/home':
+            final args = settings.arguments as Map<String, String>;
+            return MaterialPageRoute(
+              builder: (context) => BottomNavBar(
+                firstName: args['firstName'] ?? 'Guest',
+                avatarUrl: args['avatarUrl'] ?? ''
+              ),
+            );
+          default:
+            return MaterialPageRoute(builder: (context) => const LoginPage());
+        }
+      },
     );
   }
 }
