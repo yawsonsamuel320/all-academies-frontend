@@ -1,3 +1,3 @@
 class Config {
-  static const String apiBaseUrl = "http://192.168.140.69:8000";
+  static const String apiBaseUrl = "http://10.21.46.151:8000";
 }

@@ -28,7 +28,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         _passwordController.text,
       );
       print('🟢 Logged in successfully');
-      final response = await authRepo.getCurrentUser();
+      final userDetails = await authRepo.getCurrentUser();
 
       if (token != null) {
         // Navigate to home or save token
@@ -36,9 +36,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           context,
           MaterialPageRoute(
               builder: (context) => BottomNavBar(
-                    firstName: response?['first_name'] ?? 'Guest',
-                    avatarUrl: response?['avatar'] ?? '',
-                  )),
+                  userDetails: userDetails as Map<String, dynamic>
+                 )),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

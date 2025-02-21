@@ -117,8 +117,7 @@ class MyApp extends StatelessWidget {
             final args = settings.arguments as Map<String, String>;
             return MaterialPageRoute(
               builder: (context) => BottomNavBar(
-                firstName: args['firstName'] ?? 'Guest',
-                avatarUrl: args['avatarUrl'] ?? ''
+               userDetails: args['userDetails'] as Map<String, dynamic>,
               ),
             );
           default:

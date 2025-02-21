@@ -4,19 +4,23 @@ import '../../features/courses/presentation/courses_screen.dart';
 import '../../features/library/presentation/library_screen.dart';
 import '../../features/groups/presentation/groups_screen.dart';
 import '../../features/more/presentation/more_screen.dart';
+import 'package:all_academies/features/auth/data/auth_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BottomNavBar extends StatefulWidget {
-  final String firstName;
-  final String avatarUrl;
+class BottomNavBar extends ConsumerStatefulWidget {
+  Map<String, dynamic>? userDetails;
 
-  BottomNavBar({super.key, required this.firstName, required this.avatarUrl});
+  BottomNavBar(
+      {super.key,
+      required this.userDetails});
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class _BottomNavBarState extends ConsumerState<BottomNavBar> {
   int _selectedIndex = 0;
+  bool isLoading = false;
 
   late final List<Widget> _pages;
 
@@ -25,8 +29,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     super.initState();
     _pages = [
       HomePage(
-        firstName: widget.firstName,
-        avatarUrl: widget.avatarUrl,
+        userDetails: widget.userDetails
       ), // Changed from HomeScreen() to HomePage()
       CoursesScreen(),
       LibraryScreen(),
@@ -38,6 +41,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  Future<void> _pullRefresh() async {
+    setState(() => isLoading = true);
+
+    final authRepo = ref.read(authRepositoryProvider);
+    
+    Map<String, dynamic>? userDetails = await authRepo.getCurrentUser();
+
+    setState(() {
+      widget.userDetails = userDetails;
+      isLoading = false;
     });
   }
 
@@ -67,4 +83,5 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
     );
   }
+
 }

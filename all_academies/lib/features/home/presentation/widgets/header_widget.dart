@@ -33,8 +33,6 @@ class HeaderWidget extends StatelessWidget {
         Row(
           children: [
             Icon(Icons.notifications, size: 28),
-            SizedBox(width: 10),
-            Icon(Icons.nightlight_round, size: 28),
           ],
         ),
       ],
